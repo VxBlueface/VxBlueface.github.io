@@ -36,17 +36,17 @@
   </head>
   <body>
     <div class="container">
-      <img src="../Images/Fin Flow Logo.jpg" width="800" height="600" />
-      <h1>Welcome to our first subpage</h1>
-      <p>Click the button</p>
-      <button onclick="showMessage()">Click Me</button>
+      <img src="Images/Fin Flow Logo.jpg" width="800" height="600" />
+      <h1>Welcome to FinFlow</h1>
+      <p>Click the button to start tracking your expenses:</p>
+      <button onclick="openPage()">Click Me</button>
 
       <p id="message"></p>
     </div>
 
     <script>
-      function showMessage() {
-        document.getElementById("message").innerText = "Hello, World!";
+      function openPage() {
+        window.open("Subpages/newpage.html", "_self");
       }
     </script>
   </body>
