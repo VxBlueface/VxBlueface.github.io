@@ -38,7 +38,7 @@
 <body>
     
     <div class="container">
-        <img src="Images/Fin Flow Logo.jpg" width="800" height="600">
+        <img src="Images/Fin_Flow_Logo.jpg" width="800" height="600">
         <h1>Welcome to FinFlow</h1>
         <p>Click the button to start tracking your expenses:</p>
         <button onclick="showMessage()">Click Me</button>
