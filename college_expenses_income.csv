@@ -1,0 +1,17 @@
+Category,Type,Amount,Date
+Tuition,Expense,5000,1/1/2025
+Rent,Expense,800,1/16/2025
+Groceries,Expense,300,1/17/2025
+Utilities,Expense,100,1/8/2025
+Internet,Expense,50,1/28/2025
+Phone Bill,Expense,60,1/6/2025
+Transportation,Expense,100,1/7/2025
+Books & Supplies,Expense,500,1/12/2025
+Entertainment,Expense,100,1/9/2025
+Dining Out,Expense,150,1/30/2025
+Gym Membership,Expense,40,1/11/2025
+Medical Expenses,Expense,200,1/18/2025
+Part-time Job,Income,1000,1/13/2025
+Scholarship,Income,2000,1/14/2025
+Grants,Income,1500,1/15/2025
+Parental Support,Income,500,1/25/2025
