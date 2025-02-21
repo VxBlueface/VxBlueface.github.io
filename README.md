@@ -1,57 +1,52 @@
-# goldendawn4306.github.io
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Web Application</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-        }
-        .container {
-            text-align: center;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            margin-top: 20px;
-            border-radius: 5px;
-            background-color: #007BFF;
-            color: white;
-        }
-    </style>
-</head>
-<body>
-    
-    <div class="container">
-        <img src="Images/Fin_Flow_Logo.jpg" width="800" height="600">
-        <h1>Welcome to FinFlow</h1>
-        <p>Click the button to start tracking your expenses:</p>
-        <button onclick="showMessage()">Click Me</button>
-        
-        <p id="message"></p>
-        
-        
-    </div>
+# FinFlow – A Comprehensive Solution for Personal Expense Tracking
 
-    <script>
-        function showMessage() {
-            document.getElementById('message').innerText = 'Hello, World!';
-        }
-    </script>
-</body>
-</html>
+## Overview
+
+FinFlow is a web-based application designed to simplify personal expense tracking and empower users to make informed financial decisions. With FinFlow, users can log, categorize, and review their income and expenses, set budgets, and gain insights into their spending patterns—all through an intuitive dashboard.
+
+Hosted on GitHub Pages [here](https://vxblueface.github.io/).
+
+## Project Objectives
+
+1. **Expense Tracking:**  
+   - Enable users to log and categorize both income and expenses easily.
+
+2. **Financial Insights:**  
+   - Provide visual analysis of spending patterns.
+   - Calculate monthly differences in spending to help users understand their habits.
+
+3. **Budget/Goal Management:**  
+   - Allow users to set monthly budgets and track their progress toward financial goals.
+
+4. **User-Friendly Dashboards:**  
+   - Create intuitive dashboards that display key financial information, including spending summaries, savings, and upcoming bills.
+
+5. **Secure Data Handling:**  
+   - Implement encryption and adhere to data protection standards to ensure the security and privacy of user financial information.
+
+## Repository Structure
+
+- `index.html`  
+  The landing page for FinFlow with navigation to subpages.
+
+- `Subpages/`  
+  Contains additional pages, such as:
+  - `expense_input.html` – Manually enter financial transactions.
+
+## Development
+
+1. Clone or Download the Repository (replace **yourusername** with your GitHub username):
+
+   ```bash
+   git clone https://github.com/yourusername/finflow.git
+   ```
+
+2. Open the Project:
+
+    - Open the repository folder in Visual Studio Code
+    - Use a web browser to open `index.html` in the root project directory
+
+3. Modify HTML Files:
+
+    - Make changes to `index.html` and `.html` files in the Subpages/ directory
+    - Add new pages in Subpages/ and allow them to be navigated to from the preexisting web application
