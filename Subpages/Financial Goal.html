@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Goal Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+        }
+        input, button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        
+
+        <h1>Financial Goal Calculator</h1>
+        <label for="goal">Financial Goal ($):</label>
+        <input type="number" id="goal" placeholder="Enter your financial goal">
+        
+        <label for="currentSavings">Current Savings ($):</label>
+        <input type="number" id="currentSavings" placeholder="Enter your current savings">
+        
+        <label for="monthlySavings">Monthly Savings ($):</label>
+        <input type="number" id="monthlySavings" placeholder="Enter your monthly savings">
+        
+        <button onclick="calculateSavings()">Calculate</button>
+        
+        <h2 id="result"></h2>
+    </div>
+
+    <script>
+        function calculateSavings() {
+            const goal = parseFloat(document.getElementById('goal').value);
+            const currentSavings = parseFloat(document.getElementById('currentSavings').value);
+            const monthlySavings = parseFloat(document.getElementById('monthlySavings').value);
+
+            if (isNaN(goal) || isNaN(currentSavings) || isNaN(monthlySavings)) {
+                document.getElementById('result').innerText = 'Please enter valid numbers.';
+                return;
+            }
+
+            const remainingAmount = goal - currentSavings;
+            const monthsNeeded = remainingAmount / monthlySavings;
+
+            if (monthsNeeded <= 0) {
+                document.getElementById('result').innerText = 'You have already reached your goal!';
+            } else {
+                document.getElementById('result').innerText = `You need to save for ${Math.ceil(monthsNeeded)} more months to reach your goal.`;
+            }
+        }
+    </script>
+</body>
+</html>
