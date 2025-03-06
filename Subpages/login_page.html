@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - FinFlow</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+      }
+      .container {
+        text-align: center;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 300px;
+      }
+      input {
+        width: 90%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: white;
+        width: 100%;
+        margin-top: 10px;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      .link {
+        display: block;
+        margin-top: 15px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Login to FinFlow</h2>
+      <div id="form_content_container">
+        <div id="form_content_inner_container">
+          <input type="email" id="email" placeholder="Email" />
+          <input type="password" id="password" placeholder="Password" />
+
+          <div id="button_container">
+            <button onclick="login()">Login</button>
+            <button onclick="register()">Register</button>
+          </div>
+        </div>
+      </div>
+      <!--<a href="signup.html" class="link">Don't have an account? Sign up</a>-->
+      <a href="../index.html" class="link">Back to Home</a>
+    </div>
+  </body>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+       https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+
+  <!-- Our script must be loaded after firebase references -->
+  <script src="../firebase-config.js"></script>
+</html>
