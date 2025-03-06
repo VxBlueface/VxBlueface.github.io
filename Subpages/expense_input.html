@@ -117,9 +117,15 @@
             <!-- Add more categories as needed -->
           </select>
         </div>
+
         <div id="otherCategory" name="otherCategory" style="display: none">
           <label for="otherC">Other Category</label>
           <input type="text" id="otherC" name="otherC" />
+=======
+        <div id="otherCategory" name="otherCategory" style="display: none;">
+          <label for="otherC">Other Category</label>
+          <input type="text" id="otherC" name="otherC"/>
+
         </div>
         <div>
           <label for="type">Type</label>
@@ -159,6 +165,7 @@
     <script>
       // Listen for form submission
 
+
       //Other Category option
       function toggleOtherBox() {
         var dropdown = document.getElementById("category");
@@ -191,11 +198,61 @@
           const tableBody = document.getElementById("expenseTableBody");
           const newRow = document.createElement("tr");
           newRow.innerHTML = `
+=======
+      
+      //Other Category option
+      function toggleOtherBox() {
+          var dropdown = document.getElementById("category");
+          var inputContainer = document.getElementById("otherCategory");
+
+          if (dropdown.value === "Other"){
+            inputContainer.style.display = "block";
+          } else {
+            inputContainer.style.display = "none";
+          }
+        }
+
+      document.getElementById("expenseForm").addEventListener("submit", function(e) {
+        e.preventDefault(); // Prevent form from refreshing the page
+
+        // Get form values
+        var category = document.getElementById("category").value;
+        const type = document.getElementById("type").value;
+        const amount = document.getElementById("amount").value;
+        const date = document.getElementById("date").value;
+        
+        //If "Other Category" selected, change category value to that
+        var dropdown = document.getElementById("category");
+        if (dropdown.value === "Other"){
+          category = document.getElementById("otherC").value;
+        }
+        // Create a new table row with the form data
+        const tableBody = document.getElementById("expenseTableBody");
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `
+
           <td>${category}</td>
           <td>${type}</td>
           <td>${amount}</td>
           <td>${date}</td>
         `;
+
+=======
+
+        //Delete button
+        var actionCell = newRow.insertCell(4);
+        var deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.onclick = function(){
+          tableBody.deleteRow(newRow.rowIndex - 1);
+        };
+        actionCell.appendChild(deleteButton);
+
+        
+
+        tableBody.appendChild(newRow);
+        
+
 
           //Delete button
           var actionCell = newRow.insertCell(4);
