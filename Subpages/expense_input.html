@@ -69,23 +69,17 @@
       // ✅ Wait until Firebase is fully loaded before checking authentication
       document.addEventListener("DOMContentLoaded", function () {
         if (!firebase.apps.length) {
-          console.error(
-            "🔥 Firebase is not initialized! Check firebase-config.js."
-          );
+          console.error("🔥 Firebase is not initialized! Check firebase-config.js.");
           return;
         }
 
-        // Set persistence to session
         firebase
           .auth()
           .setPersistence(firebase.auth.Auth.Persistence.SESSION)
           .then(() => {
-            // Existing and future Auth states are now persisted to the current session only
             firebase.auth().onAuthStateChanged((user) => {
               if (!user) {
-                console.log(
-                  "🚨 User not authenticated. Redirecting to login..."
-                );
+                console.log("🚨 User not authenticated. Redirecting to login...");
                 window.location.href = "../index.html"; // Redirect to login page
               } else {
                 console.log("✅ User is authenticated:", user.email);
@@ -98,6 +92,7 @@
           });
       });
     </script>
+
     <div class="container">
       <h1>Expense Tracker</h1>
 
@@ -114,13 +109,14 @@
             <option value="Salary">Salary</option>
             <option value="Transportation">Transportation</option>
             <option value="Other">Other</option>
-            <!-- Add more categories as needed -->
           </select>
         </div>
-        <div id="otherCategory" name="otherCategory" style="display: none">
+
+        <div id="otherCategory" style="display: none;">
           <label for="otherC">Other Category</label>
           <input type="text" id="otherC" name="otherC" />
         </div>
+
         <div>
           <label for="type">Type</label>
           <select id="type" name="type">
@@ -151,66 +147,56 @@
           </tr>
         </thead>
         <tbody id="expenseTableBody">
-          <!-- New entries will be added here -->
         </tbody>
       </table>
     </div>
 
     <script>
-      // Listen for form submission
-
-      //Other Category option
+      // Function to toggle the "Other Category" input field
       function toggleOtherBox() {
         var dropdown = document.getElementById("category");
         var inputContainer = document.getElementById("otherCategory");
 
-        if (dropdown.value === "Other") {
-          inputContainer.style.display = "block";
-        } else {
-          inputContainer.style.display = "none";
-        }
+        inputContainer.style.display = dropdown.value === "Other" ? "block" : "none";
       }
 
-      document
-        .getElementById("expenseForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault(); // Prevent form from refreshing the page
+      document.getElementById("expenseForm").addEventListener("submit", function (e) {
+        e.preventDefault(); // Prevent page refresh
 
-          // Get form values
-          var category = document.getElementById("category").value;
-          const type = document.getElementById("type").value;
-          const amount = document.getElementById("amount").value;
-          const date = document.getElementById("date").value;
+        // Get form values
+        let category = document.getElementById("category").value;
+        const type = document.getElementById("type").value;
+        const amount = document.getElementById("amount").value;
+        const date = document.getElementById("date").value;
 
-          //If "Other Category" selected, change category value to that
-          var dropdown = document.getElementById("category");
-          if (dropdown.value === "Other") {
-            category = document.getElementById("otherC").value;
-          }
-          // Create a new table row with the form data
-          const tableBody = document.getElementById("expenseTableBody");
-          const newRow = document.createElement("tr");
-          newRow.innerHTML = `
+        // If "Other" is selected, use the entered value instead
+        if (category === "Other") {
+          category = document.getElementById("otherC").value;
+        }
+
+        // Create a new table row
+        const tableBody = document.getElementById("expenseTableBody");
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `
           <td>${category}</td>
           <td>${type}</td>
           <td>${amount}</td>
           <td>${date}</td>
+          <td><button onclick="deleteRow(this)">Delete</button></td>
         `;
 
-          //Delete button
-          var actionCell = newRow.insertCell(4);
-          var deleteButton = document.createElement("button");
-          deleteButton.textContent = "Delete";
-          deleteButton.onclick = function () {
-            tableBody.deleteRow(newRow.rowIndex - 1);
-          };
-          actionCell.appendChild(deleteButton);
+        // Append row to the table
+        tableBody.appendChild(newRow);
 
-          tableBody.appendChild(newRow);
+        // Reset the form
+        this.reset();
+        document.getElementById("otherCategory").style.display = "none"; // Hide "Other" input after adding
+      });
 
-          // Optionally, reset the form after submission
-          this.reset();
-        });
+      // Function to delete a row
+      function deleteRow(button) {
+        button.parentElement.parentElement.remove();
+      }
     </script>
   </body>
 </html>
