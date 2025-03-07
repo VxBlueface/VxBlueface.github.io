@@ -93,7 +93,7 @@ function login() {
       alert("User logged in");
 
       // Redirect users to the finance dashboard
-      window.location.href = "/Subpages/expense_input.html";
+      window.location.href = "/Subpages/dashboard.html";
     })
     .catch(function (error) {
       // Firebase will use this to alert of its errors

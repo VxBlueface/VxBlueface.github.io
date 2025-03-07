@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Dashboard - FinFlow</title>
+  <style>
+    /* Basic styling for the dashboard */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+    header {
+      background-color: #007bff;
+      padding: 10px;
+    }
+    header nav a {
+      color: #fff;
+      text-decoration: none;
+      margin-right: 15px;
+      font-weight: bold;
+    }
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .dashboard-links a {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    .dashboard-links a:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <!-- Reusable Navbar -->
+  <header>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="expense_input.html">Expense Input</a>
+      <a href="Financial Goal.html">Financial Goal</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h1>User Dashboard</h1>
+    <p>Welcome to FinFlow!</p>
+  </div>
+
+  <!-- Firebase Scripts for Authentication -->
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+  <script src="../firebase-config.js"></script>
+  <script>
+    // Ensure the user is authenticated before displaying the dashboard
+    document.addEventListener("DOMContentLoaded", function() {
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (!user) {
+          // Redirect to the home/login page if not authenticated
+          window.location.href = "../index.html";
+        }
+      });
+    });
+
+    // Logout function to sign out the user
+    function logout() {
+      firebase.auth().signOut()
+        .then(() => {
+          window.location.href = "../index.html";
+        })
+        .catch((error) => {
+          console.error("Logout Error:", error);
+        });
+    }
+  </script>
+</body>
+</html>
