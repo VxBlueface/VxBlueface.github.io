@@ -15,15 +15,15 @@
         background-repeat: no-repeat;
       }
       header {
-      background-color: #007bff;
-      padding: 10px;
-    }
-    header nav a {
-      color: #fff;
-      text-decoration: none;
-      margin-right: 15px;
-      font-weight: bold;
-    }
+        background-color: #007bff;
+        padding: 10px;
+      }
+      header nav a {
+        color: #fff;
+        text-decoration: none;
+        margin-right: 15px;
+        font-weight: bold;
+      }
       .container {
         max-width: 800px;
         margin: 0 auto;
@@ -31,6 +31,7 @@
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: none; /* Hidden until user is authenticated */
       }
       form {
         display: grid;
@@ -75,45 +76,22 @@
     </style>
   </head>
   <body>
-    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
-    <script src="../firebase-config.js"></script>
-    <script>
-      // ✅ Wait until Firebase is fully loaded before checking authentication
-      document.addEventListener("DOMContentLoaded", function () {
-        if (!firebase.apps.length) {
-          console.error("🔥 Firebase is not initialized! Check firebase-config.js.");
-          return;
-        }
-
-        firebase
-          .auth()
-          .setPersistence(firebase.auth.Auth.Persistence.SESSION)
-          .then(() => {
-            firebase.auth().onAuthStateChanged((user) => {
-              if (!user) {
-                console.log("🚨 User not authenticated. Redirecting to login...");
-                window.location.href = "../index.html"; // Redirect to login page
-              } else {
-                console.log("✅ User is authenticated:", user.email);
-                document.querySelector(".container").style.display = "block"; // Show the container
-              }
-            });
-          })
-          .catch((error) => {
-            console.error("🚨 Error setting persistence:", error);
-          });
-      });
+    <!-- Firebase SDK (version 9+) -->
+    <script type="module">
+      import "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+      import "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+      import "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+      import "../firebase-config.js";
     </script>
 
-<header>
-  <nav style="background-color: #007bff; padding: 10px;">
-    <a href="dashboard.html" style="color: #fff; text-decoration: none; margin-right: 15px; font-weight: bold;">Dashboard</a>
-    <a href="expense_input.html" style="color: #fff; text-decoration: none; margin-right: 15px; font-weight: bold;">Expense Input</a>
-    <a href="Financial Goal.html" style="color: #fff; text-decoration: none; margin-right: 15px; font-weight: bold;">Financial Goal</a>
-    <a href="#" onclick="logout()" style="color: #fff; text-decoration: none; font-weight: bold;">Logout</a>
-  </nav>
-</header>
+    <header>
+      <nav>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="expense_input.html">Expense Input</a>
+        <a href="Financial Goal.html">Financial Goal</a>
+        <a href="#" onclick="logout()">Logout</a>
+      </nav>
+    </header>
 
     <div class="container">
       <h1>Expense Tracker</h1>
@@ -133,12 +111,10 @@
             <option value="Other">Other</option>
           </select>
         </div>
-
         <div id="otherCategory" style="display: none;">
           <label for="otherC">Other Category</label>
           <input type="text" id="otherC" name="otherC" />
         </div>
-
         <div>
           <label for="type">Type</label>
           <select id="type" name="type">
@@ -168,61 +144,140 @@
             <th>Action</th>
           </tr>
         </thead>
-        <tbody id="expenseTableBody">
-        </tbody>
+        <tbody id="expenseTableBody"></tbody>
       </table>
       <button onclick="returnDashboard()">Submit and Return to Dashboard</button>
     </div>
 
-    <script>
-      // Function to toggle the "Other Category" input field
-      function toggleOtherBox() {
-        var dropdown = document.getElementById("category");
-        var inputContainer = document.getElementById("otherCategory");
+    <script type="module">
+      // Import Firebase functions
+      import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+      import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
+      const auth = getAuth();
+      const db = getFirestore();
+
+      // Check authentication state
+      onAuthStateChanged(auth, (user) => {
+        if (!user) {
+          console.log("🚨 User not authenticated. Redirecting to login...");
+          window.location.href = "../index.html";
+        } else {
+          console.log("✅ User is authenticated:", user.email);
+          document.querySelector(".container").style.display = "block";
+          loadExpenses(user.uid); // Load expenses for this user
+        }
+      });
+
+      // Logout function
+      window.logout = function () {
+        signOut(auth)
+          .then(() => {
+            console.log("✅ User logged out");
+            window.location.href = "../index.html";
+          })
+          .catch((error) => {
+            console.error("🚨 Error logging out:", error);
+          });
+      };
+
+      // Toggle "Other" category input
+      window.toggleOtherBox = function () {
+        const dropdown = document.getElementById("category");
+        const inputContainer = document.getElementById("otherCategory");
         inputContainer.style.display = dropdown.value === "Other" ? "block" : "none";
-      }
+      };
 
-      document.getElementById("expenseForm").addEventListener("submit", function (e) {
-        e.preventDefault(); // Prevent page refresh
+      // Add expense to Firestore and table
+      document.getElementById("expenseForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-        // Get form values
+        const user = auth.currentUser;
+        if (!user) return;
+
         let category = document.getElementById("category").value;
         const type = document.getElementById("type").value;
-        const amount = document.getElementById("amount").value;
+        const amount = parseFloat(document.getElementById("amount").value);
         const date = document.getElementById("date").value;
 
-        // If "Other" is selected, use the entered value instead
         if (category === "Other") {
           category = document.getElementById("otherC").value;
         }
 
-        // Create a new table row
-        const tableBody = document.getElementById("expenseTableBody");
-        const newRow = document.createElement("tr");
-        newRow.innerHTML = `
-          <td>${category}</td>
-          <td>${type}</td>
-          <td>${amount}</td>
-          <td>${date}</td>
-          <td><button onclick="deleteRow(this)">Delete</button></td>
-        `;
+        const expenseData = {
+          category,
+          type,
+          amount,
+          date,
+          timestamp: new Date().toISOString(),
+        };
 
-        // Append row to the table
-        tableBody.appendChild(newRow);
+        try {
+          const docRef = await addDoc(collection(db, "users", user.uid, "expenses"), expenseData);
+          console.log("✅ Expense added with ID:", docRef.id);
 
-        // Reset the form
-        this.reset();
-        document.getElementById("otherCategory").style.display = "none"; // Hide "Other" input after adding
+          // Add to table
+          const tableBody = document.getElementById("expenseTableBody");
+          const newRow = document.createElement("tr");
+          newRow.setAttribute("data-id", docRef.id); // Store Firestore doc ID
+          newRow.innerHTML = `
+            <td>${category}</td>
+            <td>${type}</td>
+            <td>${amount}</td>
+            <td>${date}</td>
+            <td><button onclick="deleteRow('${docRef.id}', this)">Delete</button></td>
+          `;
+          tableBody.appendChild(newRow);
+
+          // Reset form
+          document.getElementById("expenseForm").reset();
+          document.getElementById("otherCategory").style.display = "none";
+        } catch (error) {
+          console.error("🚨 Error adding expense:", error);
+        }
       });
 
-      // Function to delete a row
-      function deleteRow(button) {
-        button.parentElement.parentElement.remove();
+      // Load expenses from Firestore
+      async function loadExpenses(uid) {
+        try {
+          const expensesRef = collection(db, "users", uid, "expenses");
+          const querySnapshot = await getDocs(expensesRef);
+          const tableBody = document.getElementById("expenseTableBody");
+          tableBody.innerHTML = ""; // Clear table
+
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            const row = document.createElement("tr");
+            row.setAttribute("data-id", doc.id);
+            row.innerHTML = `
+              <td>${data.category}</td>
+              <td>${data.type}</td>
+              <td>${data.amount}</td>
+              <td>${data.date}</td>
+              <td><button onclick="deleteRow('${doc.id}', this)">Delete</button></td>
+            `;
+            tableBody.appendChild(row);
+          });
+        } catch (error) {
+          console.error("🚨 Error loading expenses:", error);
+        }
       }
-      function returnDashboard(){
-        window.location.href="dashboard.html";
-      }
+
+      // Delete expense from Firestore and table
+      window.deleteRow = async function (docId, button) {
+        try {
+          await deleteDoc(doc(db, "users", auth.currentUser.uid, "expenses", docId));
+          console.log("✅ Expense deleted with ID:", docId);
+          button.parentElement.parentElement.remove();
+        } catch (error) {
+          console.error("🚨 Error deleting expense:", error);
+        }
+      };
+
+      // Return to dashboard
+      window.returnDashboard = function () {
+        window.location.href = "dashboard.html";
+      };
     </script>
   </body>
 </html>

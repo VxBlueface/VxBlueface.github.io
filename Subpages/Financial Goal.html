@@ -1,8 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Financial Goal Calculator - FinFlow</title>
+  <style>
     header {
       background-color: #007bff;
       padding: 10px;
@@ -13,102 +15,165 @@
       margin-right: 15px;
       font-weight: bold;
     }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f0f0f0; /* Fallback color */
+    }
+    .container {
+      max-width: 600px; /* Widened from 400px */
+      margin: 40px auto; /* Added more top/bottom margin */
+      background: white;
+      padding: 40px; /* Increased padding for internal spacing */
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      display: none; /* Hidden until authenticated */
+    }
+    label {
+      margin-top: 15px; /* Added spacing above labels */
+      font-weight: bold;
+    }
+    input, button {
+      display: block;
+      width: 100%;
+      margin: 15px 0; /* Increased vertical spacing */
+      padding: 12px; /* Slightly larger padding for comfort */
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      box-sizing: border-box; /* Ensures padding doesn’t affect width */
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    img {
+      display: block;
+      margin: 0 auto 30px; /* Centered with more bottom margin */
+      max-width: 100%;
+      width: 400px; /* Reduced from 800px */
+      height: auto; /* Maintains aspect ratio */
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px; /* More space below title */
+    }
+    h2 {
+      text-align: center;
+      margin-top: 20px; /* Space above result */
+    }
   </style>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financial Goal Calculator</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .container {
-            max-width: 400px;
-            margin: auto;
-        }
-        input, button {
-            display: block;
-            width: 100%;
-            margin: 10px 0;
-            padding: 10px;
-        }
-    </style>
 </head>
 <body>
-    <header>
-  <nav style="background-color: #007bff; padding: 10px;">
-    <a href="dashboard.html" style="color: #fff; text-decoration: none; margin-right: 15px; font-weight: bold;">Dashboard</a>
-    <a href="expense_input.html" style="color: #fff; text-decoration: none; margin-right: 15px; font-weight: bold;">Expense Input</a>
-    <a href="Financial Goal.html" style="color: #fff; text-decoration: none; margin-right: 15px; font-weight: bold;">Financial Goal</a>
-    <a href="#" onclick="logout()" style="color: #fff; text-decoration: none; font-weight: bold;">Logout</a>
-  </nav>
-</header>
-    <div class="container">
+  <!-- Firebase SDK (version 9+) -->
+  <script type="module">
+    import "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+    import "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import "../firebase-config.js";
+  </script>
 
-      <img src="../Images/Ram Financial Goal.jpg" width="800" height="600" />
+  <header>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="expense_input.html">Expense Input</a>
+      <a href="Financial Goal.html">Financial Goal</a>
+      <a href="#" onclick="logout()">Logout</a>
+    </nav>
+  </header>
 
-       
-        
+  <div class="container">
+    <img src="../Images/Ram Financial Goal.jpg" alt="Financial Goal Image" />
+    <h1>Financial Goal Calculator</h1>
+    <label for="goal">Financial Goal ($):</label>
+    <input type="number" id="goal" placeholder="Enter your financial goal" required>
+    
+    <label for="currentSavings">Current Savings ($):</label>
+    <input type="number" id="currentSavings" placeholder="Enter your current savings" required>
+    
+    <label for="monthlySavings">Monthly Savings ($):</label>
+    <input type="number" id="monthlySavings" placeholder="Enter your monthly savings" required>
+    
+    <button onclick="calculateAndSave()">Calculate & Save</button>
+    
+    <h2 id="result"></h2>
+  </div>
 
-        <h1>Financial Goal Calculator</h1>
-        <label for="goal">Financial Goal ($):</label>
-        <input type="number" id="goal" placeholder="Enter your financial goal">
-        
-        <label for="currentSavings">Current Savings ($):</label>
-        <input type="number" id="currentSavings" placeholder="Enter your current savings">
-        
-        <label for="monthlySavings">Monthly Savings ($):</label>
-        <input type="number" id="monthlySavings" placeholder="Enter your monthly savings">
-        
-        <button onclick="calculateSavings()">Calculate</button>
-        
-        <h2 id="result"></h2>
-    </div>
+  <script type="module">
+    // Import Firebase functions
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-    <script>
-        function calculateSavings() {
-            const goal = parseFloat(document.getElementById('goal').value);
-            const currentSavings = parseFloat(document.getElementById('currentSavings').value);
-            const monthlySavings = parseFloat(document.getElementById('monthlySavings').value);
+    const auth = getAuth();
+    const db = getFirestore();
 
-            if (isNaN(goal) || isNaN(currentSavings) || isNaN(monthlySavings)) {
-                document.getElementById('result').innerText = 'Please enter valid numbers.';
-                return;
-            }
-
-            const remainingAmount = goal - currentSavings;
-            const monthsNeeded = remainingAmount / monthlySavings;
-
-            if (monthsNeeded <= 0) {
-                document.getElementById('result').innerText = 'You have already reached your goal!';
-            } else {
-                document.getElementById('result').innerText = `You need to save for ${Math.ceil(monthsNeeded)} more months to reach your goal.`;
-            }
-        }
-    </script>
-</body>
-    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
-<script src="../firebase-config.js"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    firebase.auth().onAuthStateChanged(function(user) {
+    // Check authentication state
+    onAuthStateChanged(auth, (user) => {
       if (!user) {
+        console.log("🚨 User not authenticated. Redirecting to login...");
         window.location.href = "../index.html";
+      } else {
+        console.log("✅ User is authenticated:", user.email);
+        document.querySelector(".container").style.display = "block";
       }
     });
-  });
 
-  function logout() {
-    firebase.auth().signOut()
-      .then(() => {
-        window.location.href = "../index.html";
-      })
-      .catch((error) => {
-        console.error("Logout Error:", error);
-      });
-  }
-</script>
+    // Logout function
+    window.logout = function () {
+      signOut(auth)
+        .then(() => {
+          console.log("✅ User logged out");
+          window.location.href = "../index.html";
+        })
+        .catch((error) => {
+          console.error("🚨 Logout Error:", error);
+        });
+    };
+
+    // Calculate savings and save to Firestore
+    window.calculateAndSave = async function () {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      const goal = parseFloat(document.getElementById("goal").value);
+      const currentSavings = parseFloat(document.getElementById("currentSavings").value);
+      const monthlySavings = parseFloat(document.getElementById("monthlySavings").value);
+      const resultElement = document.getElementById("result");
+
+      if (isNaN(goal) || isNaN(currentSavings) || isNaN(monthlySavings) || monthlySavings <= 0) {
+        resultElement.innerText = "Please enter valid positive numbers.";
+        return;
+      }
+
+      const remainingAmount = goal - currentSavings;
+      const monthsNeeded = remainingAmount / monthlySavings;
+
+      let resultText;
+      if (monthsNeeded <= 0) {
+        resultText = "You have already reached your goal!";
+      } else {
+        resultText = `You need to save for ${Math.ceil(monthsNeeded)} more months to reach your goal.`;
+      }
+      resultElement.innerText = resultText;
+
+      // Save to Firestore
+      const goalData = {
+        goal,
+        currentSavings,
+        monthlySavings,
+        monthsNeeded: Math.ceil(monthsNeeded),
+        timestamp: new Date().toISOString(),
+      };
+
+      try {
+        const docRef = await addDoc(collection(db, "users", user.uid, "goals"), goalData);
+        console.log("✅ Goal saved with ID:", docRef.id);
+      } catch (error) {
+        console.error("🚨 Error saving goal:", error);
+        resultElement.innerText += " (Error saving goal, check console)";
+      }
+    };
+  </script>
+</body>
 </html>
-
-
