@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>User Dashboard - FinFlow</title>
   <style>
-    /* Basic styling for the dashboard */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -27,10 +26,18 @@
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       text-align: center;
+      display: none; /* Hidden until authenticated */
     }
   </style>
 </head>
 <body>
+  <!-- Firebase SDK (version 9+) -->
+  <script type="module">
+    import "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+    import "../firebase-config.js";
+  </script>
+
   <!-- Reusable Navbar -->
   <header>
     <nav>
@@ -43,34 +50,40 @@
 
   <div class="container">
     <h1>User Dashboard</h1>
-    <p>Welcome to FinFlow!</p>
+    <p id="welcomeMessage">Welcome to FinFlow!</p>
   </div>
 
-  <!-- Firebase Scripts for Authentication -->
-  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
-  <script src="../firebase-config.js"></script>
-  <script>
-    // Ensure the user is authenticated before displaying the dashboard
-    document.addEventListener("DOMContentLoaded", function() {
-      firebase.auth().onAuthStateChanged(function(user) {
-        if (!user) {
-          // Redirect to the home/login page if not authenticated
-          window.location.href = "../index.html";
-        }
-      });
+  <script type="module">
+    // Import Firebase functions
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+
+    const auth = getAuth();
+
+    // Check authentication state
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        console.log("🚨 User not authenticated. Redirecting to login...");
+        window.location.href = "../index.html";
+      } else {
+        console.log("✅ User is authenticated:", user.email);
+        // Show the container and personalize the welcome message
+        const container = document.querySelector(".container");
+        container.style.display = "block";
+        document.getElementById("welcomeMessage").textContent = `Welcome to FinFlow, ${user.email}!`;
+      }
     });
 
-    // Logout function to sign out the user
-    function logout() {
-      firebase.auth().signOut()
+    // Logout function
+    window.logout = function () {
+      signOut(auth)
         .then(() => {
+          console.log("✅ User logged out");
           window.location.href = "../index.html";
         })
         .catch((error) => {
-          console.error("Logout Error:", error);
+          console.error("🚨 Logout Error:", error);
         });
-    }
+    };
   </script>
 </body>
 </html>

@@ -1,0 +1,12 @@
+This update edited the code from 3_13_25
+
+The update moved from the firebase real-time database to the cloud firestore
+
+This require updating all of the pages to reflect the new code and updated syntax
+
+All users stored in the real-time database were deleted and repopulated into the firestore
+
+The financial goal page was updated to look more like the rest of the website and store the goal
+- It does not yet display the goal on the dashboard or finance page, just has it in the DB
+
+The expense input page was updated to maintain user data in the table between logins and page refreshes.
