@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,26 +11,53 @@
       margin: 0;
       background-color: #f0f0f0;
     }
+
     header {
       background-color: #007bff;
       padding: 10px;
     }
+
     header nav a {
       color: #fff;
       text-decoration: none;
       margin-right: 15px;
       font-weight: bold;
     }
+
     .container {
       background: white;
       padding: 40px;
       border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       text-align: center;
-      display: none; /* Hidden until authenticated */
+      display: none;
+      /* Hidden until authenticated */
+    }
+
+    canvas {
+      max-width: 100%;
+      height: auto !important;
+    }
+
+    .chart-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .chart-wrapper {
+      flex: 1 1 400px;
+      max-width: 600px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
   </style>
 </head>
+
 <body>
   <!-- Firebase SDK (version 9+) -->
   <script type="module">
@@ -37,6 +65,9 @@
     import "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
     import "../firebase-config.js";
   </script>
+
+  <!-- Chart JS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <!-- Reusable Navbar -->
   <header>
@@ -51,11 +82,24 @@
   <div class="container">
     <h1>User Dashboard</h1>
     <p id="welcomeMessage">Welcome to FinFlow!</p>
+
+    <div class="chart-grid">
+      <div class="chart-wrapper">
+        <h2>Expense Breakdown</h2>
+        <canvas id="expenseChart" width="400" height="200"></canvas>
+      </div>
+      <div class="chart-wrapper">
+        <h2>Goal Progress</h2>
+        <canvas id="goalChart" width="400" height="200"></canvas>
+      </div>
+    </div>
   </div>
+
 
   <script type="module">
     // Import Firebase functions
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
     const auth = getAuth();
 
@@ -70,6 +114,9 @@
         const container = document.querySelector(".container");
         container.style.display = "block";
         document.getElementById("welcomeMessage").textContent = `Welcome to FinFlow, ${user.email}!`;
+
+        renderExpenseChart(user.uid);
+        renderGoalChart(user.uid);
       }
     });
 
@@ -84,6 +131,136 @@
           console.error("🚨 Logout Error:", error);
         });
     };
+
+    const db = getFirestore();
+
+    async function renderExpenseChart(uid) {
+      const expensesSnapshot = await getDocs(collection(db, "users", uid, "expenses"));
+      const categoryTotals = {};
+
+      expensesSnapshot.forEach(doc => {
+        const { category, amount } = doc.data();
+        if (category in categoryTotals) {
+          categoryTotals[category] += amount;
+        } else {
+          categoryTotals[category] = amount;
+        }
+      });
+
+      const categories = Object.keys(categoryTotals);
+      const amounts = Object.values(categoryTotals);
+
+      new Chart(document.getElementById("expenseChart"), {
+        type: "pie",
+        data: {
+          labels: categories,
+          datasets: [{
+            label: "Expenses by Category",
+            data: amounts,
+            backgroundColor: [
+              "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40"
+            ]
+          }]
+        }
+      });
+    }
+
+    async function renderGoalChart(uid) {
+      const goalsSnapshot = await getDocs(collection(db, "users", uid, "goals"));
+      const expensesSnapshot = await getDocs(collection(db, "users", uid, "expenses"));
+
+      const monthlyGoals = {}; // { "04/2025": { required: 200, timestamp: ... } }
+      const actualSavings = {}; // { "04/2025": { income: 0, expense: 0 } }
+
+      // Parse goal documents
+      goalsSnapshot.forEach(doc => {
+        const { goal, monthsNeeded, timestamp } = doc.data();
+        const date = new Date(timestamp);
+        const key = `${date.getMonth() + 1}`.padStart(2, "0") + "/" + date.getFullYear();
+
+        const monthlyRequired = monthsNeeded > 0 ? goal / monthsNeeded : 0;
+        monthlyGoals[key] = { required: monthlyRequired, timestamp: date };
+      });
+
+      // Parse expenses to build actual savings
+      expensesSnapshot.forEach(doc => {
+        const { amount, type, date } = doc.data(); // `date` is user-inputted
+
+        if (!amount || !date) return;
+
+        const dateObj = new Date(date);
+        const key = `${dateObj.getMonth() + 1}`.padStart(2, "0") + "/" + dateObj.getFullYear();
+
+        if (!(key in actualSavings)) {
+          actualSavings[key] = { income: 0, expense: 0 };
+        }
+
+        if (type.toLowerCase() === "income") {
+          actualSavings[key].income += amount;
+        } else {
+          actualSavings[key].expense += amount;
+        }
+      });
+
+      // Prepare chart data
+      const labels = Object.keys(monthlyGoals).sort((a, b) => new Date(monthlyGoals[a].timestamp) - new Date(monthlyGoals[b].timestamp));
+      const requiredData = [];
+      const actualData = [];
+
+      labels.forEach(key => {
+        const required = monthlyGoals[key].required;
+        const income = actualSavings[key]?.income || 0;
+        const expense = actualSavings[key]?.expense || 0;
+        const net = income - expense;
+
+        requiredData.push(required.toFixed(2));
+        actualData.push(net.toFixed(2));
+      });
+
+      // Render chart
+      new Chart(document.getElementById("goalChart"), {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [
+            {
+              label: "Required Savings",
+              data: requiredData,
+              backgroundColor: "#007bff"
+            },
+            {
+              label: "Actual Savings",
+              data: actualData,
+              backgroundColor: "#28a745"
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            title: {
+              display: true,
+              text: 'Monthly Savings Goal vs Actual'
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Amount ($)'
+              }
+            }
+          }
+        }
+      });
+    }
+
   </script>
 </body>
+
 </html>
