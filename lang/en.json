@@ -1,0 +1,21 @@
+{
+    "dashboard_title": "User Dashboard",
+    "welcome": "Welcome to FinFlow!",
+    "nav_dashboard": "Dashboard",
+    "nav_expense_input": "Expense Input",
+    "nav_goal": "Financial Goal",
+    "nav_logout": "Logout",
+    "language_label": "🌐 Language:",
+    "expense_breakdown": "Expense Breakdown",
+    "goal_progress": "Goal Progress",
+    "chart_expenses_by_category": "Expenses by Category",
+    "chart_required_savings": "Required Savings",
+    "chart_actual_savings": "Actual Savings",
+    "chart_main_title": "Monthly Savings Goal vs Actual",
+    "chart_y_axis": "Amount ($)",
+    "auth_not_authenticated": "🚨 User not authenticated. Redirecting to login...",
+    "auth_authenticated": "✅ User is authenticated:",
+    "auth_logged_out": "✅ User logged out",
+    "auth_logout_error": "🚨 Logout Error:"
+  }
+  

@@ -1,0 +1,21 @@
+{
+    "dashboard_title": "사용자 대시보드",
+    "welcome": "FinFlow에 오신 것을 환영합니다!",
+    "nav_dashboard": "대시보드",
+    "nav_expense_input": "지출 입력",
+    "nav_goal": "재무 목표",
+    "nav_logout": "로그아웃",
+    "language_label": "🌐 언어:",
+    "expense_breakdown": "지출 내역",
+    "goal_progress": "목표 진행 상황",
+    "chart_expenses_by_category": "카테고리별 지출",
+    "chart_required_savings": "필요한 저축액",
+    "chart_actual_savings": "실제 저축액",
+    "chart_main_title": "월별 저축 목표 vs 실제",
+    "chart_y_axis": "금액 ($)",
+    "auth_not_authenticated": "🚨 인증되지 않은 사용자입니다. 로그인 페이지로 이동 중...",
+    "auth_authenticated": "✅ 인증된 사용자:",
+    "auth_logged_out": "✅ 로그아웃 완료",
+    "auth_logout_error": "🚨 로그아웃 오류:"
+  }
+  

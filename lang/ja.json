@@ -1,0 +1,21 @@
+{
+    "dashboard_title": "ユーザーダッシュボード",
+    "welcome": "FinFlowへようこそ！",
+    "nav_dashboard": "ダッシュボード",
+    "nav_expense_input": "支出入力",
+    "nav_goal": "目標設定",
+    "nav_logout": "ログアウト",
+    "language_label": "🌐 言語：",
+    "expense_breakdown": "支出の内訳",
+    "goal_progress": "目標の進捗",
+    "chart_expenses_by_category": "カテゴリ別支出",
+    "chart_required_savings": "必要な貯金額",
+    "chart_actual_savings": "実際の貯金額",
+    "chart_main_title": "月別貯金目標と実績",
+    "chart_y_axis": "金額（$）",
+    "auth_not_authenticated": "🚨 ユーザーが認証されていません。ログインページにリダイレクト中...",
+    "auth_authenticated": "✅ 認証されたユーザー：",
+    "auth_logged_out": "✅ ログアウトしました",
+    "auth_logout_error": "🚨 ログアウトエラー："
+  }
+  
