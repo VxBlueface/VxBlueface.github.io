@@ -7,10 +7,14 @@
   <title>User Dashboard - FinFlow</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background-color: #f0f0f0;
-    }
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-image: url(Subpage_Images/Fin_Flow_Background.jpg);
+        background-size: cover;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+      }
 
     header {
       background-color: #007bff;
@@ -215,10 +219,10 @@
       expenseChartRef = new Chart(document.getElementById("expenseChart"), {
         type: "pie",
         data: {
-          labels: categories,
+          labels: categories, 
           datasets: [{
-            label: "Expenses by Category", // fallback, overwritten later
-            data: amounts,
+            label: "Expenses by Category" , // fallback, overwritten later
+            data: amounts, 
             backgroundColor: [
               "#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF", "#FF9F40"
             ]

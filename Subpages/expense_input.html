@@ -127,6 +127,16 @@
           <input type="number" id="amount" name="amount" required />
         </div>
         <div>
+          <label for="currency">Currency</label>
+          <select id="currency" name="currency">
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+            <option value="JPY">JPY</option>
+            <option value="KRW">KRW</option>
+            <option value="GBP">GBP</option>            
+          </select>
+        </div>
+        <div>
           <label for="date">Date</label>
           <input type="date" id="date" name="date" required />
         </div>
@@ -140,6 +150,7 @@
             <th>Category</th>
             <th>Type</th>
             <th>Amount</th>
+            <th>Currency</th>
             <th>Date</th>
             <th>Action</th>
           </tr>
@@ -198,8 +209,9 @@
         let category = document.getElementById("category").value;
         const type = document.getElementById("type").value;
         const amount = parseFloat(document.getElementById("amount").value);
+        const currency = document.getElementById("currency").value;
         const date = document.getElementById("date").value;
-
+        
         if (category === "Other") {
           category = document.getElementById("otherC").value;
         }
@@ -208,6 +220,7 @@
           category,
           type,
           amount,
+          currency,
           date,
           timestamp: new Date().toISOString(),
         };
@@ -224,6 +237,7 @@
             <td>${category}</td>
             <td>${type}</td>
             <td>${amount}</td>
+            <td>${currency}</td>
             <td>${date}</td>
             <td><button onclick="deleteRow('${docRef.id}', this)">Delete</button></td>
           `;
@@ -253,6 +267,7 @@
               <td>${data.category}</td>
               <td>${data.type}</td>
               <td>${data.amount}</td>
+              <td>${data.currency}</td>
               <td>${data.date}</td>
               <td><button onclick="deleteRow('${doc.id}', this)">Delete</button></td>
             `;
