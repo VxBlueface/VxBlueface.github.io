@@ -123,6 +123,55 @@
       }
     });
 
+  // Load selected language from user or localStorage
+    async function loadUserLanguage(uid) {
+      const userDoc = await getDoc(doc(db, "users", uid));
+      let lang = "en";
+
+      if (userDoc.exists()) {
+        lang = userDoc.data().language || localStorage.getItem("lang") || "en";
+      } else {
+        lang = localStorage.getItem("lang") || "en";
+      }
+
+      document.getElementById("langSelect").value = lang;
+      localStorage.setItem("lang", lang);
+      await applyLanguage(lang);
+    }
+
+    // When user changes the dropdown
+    window.changeLanguage = async function (lang) {
+      const uid = auth.currentUser?.uid;
+      localStorage.setItem("lang", lang);
+      document.getElementById("langSelect").value = lang;
+      await applyLanguage(lang);
+
+      if (uid) {
+        await setDoc(doc(db, "users", uid), { language: lang }, { merge: true });
+      }
+    };
+
+    async function applyLanguage(lang) {
+      const res = await fetch(`/lang/${lang}.json`);
+      const messages = await res.json();
+
+      // Static content
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (messages[key]) {
+          el.textContent = messages[key];
+        }
+      });
+
+      // Chart labels (optional: you can skip if charts aren't visible yet)
+      if (window.updateCharts) {
+        window.updateCharts(messages); // Hook for dynamic chart relabeling
+      }
+    }
+
+
+    
+
     // Logout function
     window.logout = function () {
       signOut(auth)
