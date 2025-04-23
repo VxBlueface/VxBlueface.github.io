@@ -1,4 +1,14 @@
 {
+    "financial_goal_calculator": "재정적 목표 계산기",
+    "financial_goal": "재정적 목표",
+    "current_savings": "현재 저축액",
+    "monthly_savings": "월 저축액",
+    "calculate_button": "계산하기",
+    "result": "결과",
+    "goal_reached": "목표 도달!",
+    "goal_not_reached": "목표에 도달하지 못했습니다.",
+    "error_message": "오류가 발생했습니다. 다시 시도하세요."
+
     "dashboard_title": "사용자 대시보드",
     "welcome": "FinFlow에 오신 것을 환영합니다!",
     "nav_dashboard": "대시보드",
