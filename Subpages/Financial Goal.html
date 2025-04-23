@@ -89,15 +89,15 @@
 
   <div class="container">
     <img src="../Images/Ram Financial Goal.jpg" alt="Financial Goal Image" />
-    <h1>Financial Goal Calculator</h1>
-    <label for="goal">Financial Goal ($)</label>
-    <input type="number" id="goal" placeholder="Enter your financial goal" required>
-    
-    <label for="currentSavings">Current Savings ($)</label>
-    <input type="number" id="currentSavings" placeholder="Enter your current savings" required>
-    
-    <label for="monthlySavings">Monthly Savings ($)</label>
-    <input type="number" id="monthlySavings" placeholder="Enter your monthly savings" required>
+    <h1 data-i18n="financial_goal_calculator">Financial Goal Calculator</h1>
+    <label data-i18n="financial_goal" for="goal">Financial Goal ($):</label>
+    <input type="number" id="goal" placeholder="Enter your financial goal">
+
+    <label data-i18n="current_savings" for="currentSavings">Current Savings ($):</label>
+    <input type="number" id="currentSavings" placeholder="Enter your current savings">
+
+    <label data-i18n="monthly_savings" for="monthlySavings">Monthly Savings ($):</label>
+    <input type="number" id="monthlySavings" placeholder="Enter your monthly savings">
     
     <button onclick="calculateAndSave()">Calculate & Save</button>
     
