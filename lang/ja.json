@@ -1,4 +1,14 @@
 {
+    "financial_goal_calculator": "財務目標の計算ツール",
+    "financial_goal": "財務目標",
+    "current_savings": "現在の貯金額",
+    "monthly_savings": "月間貯金額",
+    "calculate_button": "計算する",
+    "result": "結果",
+    "goal_reached": "目標達成！",
+    "goal_not_reached": "目標に達していません。",
+    "error_message": "エラーが発生しました。再試行してください。",
+    
     "dashboard_title": "ユーザーダッシュボード",
     "welcome": "FinFlowへようこそ！",
     "nav_dashboard": "ダッシュボード",
