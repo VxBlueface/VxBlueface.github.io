@@ -26,6 +26,28 @@
     "auth_not_authenticated": "🚨 ユーザーが認証されていません。ログインページにリダイレクト中...",
     "auth_authenticated": "✅ 認証されたユーザー：",
     "auth_logged_out": "✅ ログアウトしました",
-    "auth_logout_error": "🚨 ログアウトエラー："
+    "auth_logout_error": "🚨 ログアウトエラー：",
+    
+    "expense_tracker": "経費トラッカー",
+    "category": "カテゴリ",
+    "finance": "ファイナンス",
+    "food": "食べ物",
+    "rent": "家賃",
+    "utilities": "公共事業",
+    "entertainment": "エンターテインメント",
+    "salary": "給料",
+    "transportation": "交通機関",
+    "other": "他の",
+    "otherC": "その他のカテゴリー",
+    "type": "タイプ",
+    "expense": "費用",
+    "income": "所得",
+    "amount": "額",
+    "date": "日付",
+    "add_entry": "エントリの追加",
+    "action": "アクション",
+    "currency": "通貨",
+    "delete": "消去",
+    "dashboard_return": "通貨を保存してダッシュボードに戻る"
   }
   

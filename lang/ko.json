@@ -26,6 +26,28 @@
     "auth_not_authenticated": "🚨 인증되지 않은 사용자입니다. 로그인 페이지로 이동 중...",
     "auth_authenticated": "✅ 인증된 사용자:",
     "auth_logged_out": "✅ 로그아웃 완료",
-    "auth_logout_error": "🚨 로그아웃 오류:"
+    "auth_logout_error": "🚨 로그아웃 오류:",
+
+    "expense_tracker": "비용 추적기",
+    "category": "범주",
+    "finance": "재원",
+    "food": "음식",
+    "rent": "임차료",
+    "utilities": "유용",
+    "entertainment": "오락",
+    "salary": "샐러리",
+    "transportation": "운송",
+    "other": "다른",
+    "otherC": "기타 카테고리",
+    "type": "유형",
+    "expense": "비용",
+    "income": "소득",
+    "amount": "양",
+    "date": "날짜",
+    "add_entry": "항목 추가",
+    "action": "행동",
+    "currency": "통화",
+    "delete": "삭제",
+    "dashboard_return": "통화를 저장하고 대시보드로 돌아가기"
   }
   

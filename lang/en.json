@@ -16,6 +16,28 @@
     "auth_not_authenticated": "🚨 User not authenticated. Redirecting to login...",
     "auth_authenticated": "✅ User is authenticated:",
     "auth_logged_out": "✅ User logged out",
-    "auth_logout_error": "🚨 Logout Error:"
+    "auth_logout_error": "🚨 Logout Error:",
+
+    "expense_tracker": "Expense Tracker",
+    "category": "Category",
+    "finance": "Finance",
+    "food": "Food",
+    "rent": "Rent",
+    "utilities": "Utilities",
+    "entertainment": "Entertainment",
+    "salary": "Salary",
+    "transportation": "Transportation",
+    "other": "Other",
+    "otherC": "Other Category",
+    "type": "Type",
+    "expense": "Expense",
+    "income": "Income",
+    "amount": "Amount",
+    "date": "Date",
+    "add_entry": "Add Entry",
+    "action": "Action",
+    "currency": "Currency",
+    "delete": "Delete",
+    "dashboard_return": "Save Currency and Return to Dashboard"
   }
   
