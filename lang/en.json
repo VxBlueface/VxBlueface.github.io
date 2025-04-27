@@ -17,6 +17,16 @@
     "auth_authenticated": "✅ User is authenticated:",
     "auth_logged_out": "✅ User logged out",
     "auth_logout_error": "🚨 Logout Error:",
+    
+    "financial_goal_calculator": "Financial Goal Calculator",
+    "financial_goal": "Financial Goal",
+    "current_savings": "Current Savings",
+    "monthly_savings": "Monthly Savings",
+    "calculate_button": "Calculate Button",
+    "result": "Result",
+    "goal_reached": "Goal Reached!",
+    "goal_not_reached": "Goal Not Reached.",
+    "error_message": "Error",
 
     "expense_tracker": "Expense Tracker",
     "category": "Category",
