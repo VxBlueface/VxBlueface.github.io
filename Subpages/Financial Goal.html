@@ -114,21 +114,28 @@ document.addEventListener("DOMContentLoaded", () => {
   applyLanguage(savedLang);
 });
     
-// Load selected language from user or localStorage
-    async function loadUserLanguage(uid) {
-      const userDoc = await getDoc(doc(db, "users", uid));
-      let lang = "en";
+// Load navbar component
+    fetch("../components/navbar.html")
+      .then(res => res.text())
+      .then(html => {
+        const container = document.getElementById("navbar-container");
+        container.innerHTML = html;
 
-      if (userDoc.exists()) {
-        lang = userDoc.data().language || localStorage.getItem("lang") || "en";
-      } else {
-        lang = localStorage.getItem("lang") || "en";
-      }
+        // Run any inline scripts manually
+        const scripts = container.querySelectorAll("script");
+        scripts.forEach(oldScript => {
+          const newScript = document.createElement("script");
+          if (oldScript.src) {
+            newScript.src = oldScript.src;
+          } else {
+            newScript.textContent = oldScript.textContent;
+          }
+          document.body.appendChild(newScript);
+          oldScript.remove(); // optional: clean up
+        });
 
-      document.getElementById("langSelect").value = lang;
-      localStorage.setItem("lang", lang);
-      await applyLanguage(lang);
-    }
+        applyLanguage(localStorage.getItem("lang") || "en");
+      });
 
     // When user changes the dropdown
     window.changeLanguage = async function (lang) {
