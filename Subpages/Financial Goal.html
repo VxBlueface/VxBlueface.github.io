@@ -80,14 +80,7 @@
   
 <div id="navbar-container"></div>
   
-  <header>
-    <nav>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="expense_input.html">Expense Input</a>
-      <a href="Financial Goal.html">Financial Goal</a>
-      <a href="#" onclick="logout()">Logout</a>
-    </nav>
-  </header>
+  
 
   <div class="container">
     <img src="../Images/Ram Financial Goal.jpg" alt="Financial Goal Image" />
@@ -113,7 +106,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const savedLang = localStorage.getItem("lang") || "en";
   applyLanguage(savedLang);
 });
-     
+     // Load navbar component
+    fetch("../components/navbar.html")
+      .then(res => res.text())
+      .then(html => {
+        const container = document.getElementById("navbar-container");
+        container.innerHTML = html;
+
+        // Run any inline scripts manually
+        const scripts = container.querySelectorAll("script");
+        scripts.forEach(oldScript => {
+          const newScript = document.createElement("script");
+          if (oldScript.src) {
+            newScript.src = oldScript.src;
+          } else {
+            newScript.textContent = oldScript.textContent;
+          }
+          document.body.appendChild(newScript);
+          oldScript.remove(); // optional: clean up
+        });
+
+        applyLanguage(localStorage.getItem("lang") || "en");
+      });
 
     // When user changes the dropdown
     window.changeLanguage = async function (lang) {
