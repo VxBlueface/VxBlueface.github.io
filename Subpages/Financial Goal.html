@@ -113,7 +113,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const savedLang = localStorage.getItem("lang") || "en";
   applyLanguage(savedLang);
 });
-    
+     // Load navbar component
+    fetch("../components/navbar.html")
+      .then(res => res.text())
+      .then(html => {
+        const container = document.getElementById("navbar-container");
+        container.innerHTML = html;
 
 
         // Run any inline scripts manually
