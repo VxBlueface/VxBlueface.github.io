@@ -114,27 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
   applyLanguage(savedLang);
 });
     
-
-    
-    // Import Firebase functions
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-
-    const auth = getAuth();
-    const db = getFirestore();
-
-    // Check authentication state
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        console.log("🚨 User not authenticated. Redirecting to login...");
-        window.location.href = "../index.html";
-      } else {
-        console.log("✅ User is authenticated:", user.email);
-        document.querySelector(".container").style.display = "block";
-      }
-    });
-
-  // Load selected language from user or localStorage
+// Load selected language from user or localStorage
     async function loadUserLanguage(uid) {
       const userDoc = await getDoc(doc(db, "users", uid));
       let lang = "en";
@@ -180,6 +160,26 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    
+    // Import Firebase functions
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+    const auth = getAuth();
+    const db = getFirestore();
+
+    // Check authentication state
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        console.log("🚨 User not authenticated. Redirecting to login...");
+        window.location.href = "../index.html";
+      } else {
+        console.log("✅ User is authenticated:", user.email);
+        document.querySelector(".container").style.display = "block";
+      }
+    });
+
+  
 
     
 
