@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Expense Input</title>
+    <title>Expense Input - FinFlow</title>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -13,16 +13,6 @@
         background-size: cover;
         background-attachment: fixed;
         background-repeat: no-repeat;
-      }
-      header {
-        background-color: #007bff;
-        padding: 10px;
-      }
-      header nav a {
-        color: #fff;
-        text-decoration: none;
-        margin-right: 15px;
-        font-weight: bold;
       }
       .container {
         max-width: 800px;
@@ -58,11 +48,6 @@
         color: white;
         cursor: pointer;
         margin-top: 10px;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
       }
       th,
       td {
@@ -176,6 +161,22 @@
         applyLanguage(localStorage.getItem("lang") || "en");
       });
 
+      // Load selected language from user or localStorage
+    async function loadUserLanguage(uid) {
+      const userDoc = await getDoc(doc(db, "users", uid));
+      let lang = "en";
+
+      if (userDoc.exists()) {
+        lang = userDoc.data().language || localStorage.getItem("lang") || "en";
+      } else {
+        lang = localStorage.getItem("lang") || "en";
+      }
+
+      document.getElementById("langSelect").value = lang;
+      localStorage.setItem("lang", lang);
+      await applyLanguage(lang);
+    }
+
       // When user changes the dropdown
     window.changeLanguage = async function (lang) {
       const uid = auth.currentUser?.uid;
@@ -209,7 +210,7 @@
 
       // Import Firebase functions
       import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-      import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+      import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
       const auth = getAuth();
       const db = getFirestore();
@@ -223,6 +224,7 @@
           console.log("✅ User is authenticated:", user.email);
           document.querySelector(".container").style.display = "block";
           loadExpenses(user.uid); // Load expenses for this user
+          loadUserLanguage(user.uid);
         }
       });
 

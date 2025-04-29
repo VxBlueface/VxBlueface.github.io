@@ -5,16 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Financial Goal Calculator - FinFlow</title>
   <style>
-    header {
-      background-color: #007bff;
-      padding: 10px;
-    }
-    header nav a {
-      color: #fff;
-      text-decoration: none;
-      margin-right: 15px;
-      font-weight: bold;
-    }
     body {
         font-family: Arial, sans-serif;
         margin: 0;
@@ -129,6 +119,22 @@ document.addEventListener("DOMContentLoaded", () => {
         applyLanguage(localStorage.getItem("lang") || "en");
       });
 
+      // Load selected language from user or localStorage
+    async function loadUserLanguage(uid) {
+      const userDoc = await getDoc(doc(db, "users", uid));
+      let lang = "en";
+
+      if (userDoc.exists()) {
+        lang = userDoc.data().language || localStorage.getItem("lang") || "en";
+      } else {
+        lang = localStorage.getItem("lang") || "en";
+      }
+
+      document.getElementById("langSelect").value = lang;
+      localStorage.setItem("lang", lang);
+      await applyLanguage(lang);
+    }
+
     // When user changes the dropdown
     window.changeLanguage = async function (lang) {
       const uid = auth.currentUser?.uid;
@@ -162,7 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Import Firebase functions
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, setDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
     const auth = getAuth();
     const db = getFirestore();
@@ -175,6 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         console.log("✅ User is authenticated:", user.email);
         document.querySelector(".container").style.display = "block";
+        loadUserLanguage(user.uid);
       }
     });
 

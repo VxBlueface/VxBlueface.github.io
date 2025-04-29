@@ -1,42 +1,77 @@
 <!-- navbar.html -->
 <header>
-    <style>
-      .lang-selector {
-        color: white;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-  
-      .lang-selector select {
-        padding: 4px 6px;
-        border-radius: 4px;
-        border: none;
-      }
-    </style>
-  
-    <nav style="display: flex; align-items: center; justify-content: space-between;">
-      <div>
-        <a href="dashboard.html" data-i18n="nav_dashboard">Dashboard</a>
-        <a href="expense_input.html" data-i18n="nav_expense_input">Expense Input</a>
-        <a href="Financial Goal.html" data-i18n="nav_goal">Financial Goal</a>
-        <a href="#" onclick="logout()" data-i18n="nav_logout">Logout</a>
-      </div>
-  
-      <div class="lang-selector">
-        <label for="langSelect" data-i18n="language_label">🌐 Language:</label>
-        <select id="langSelect">
-          <option value="en">English</option>
-          <option value="ja">日本語</option>
-          <option value="ko">한국어</option>
-        </select>
-      </div>
-    </nav>
-  
-    <script>
-      document.getElementById("langSelect").addEventListener("change", function () {
-        changeLanguage(this.value);
-      });
-    </script>
-  </header>
-  
+  <style>
+    .lang-selector {
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .lang-selector select {
+      padding: 4px 6px;
+      border-radius: 4px;
+      border: none;
+    }
+
+    .lang-label {
+      font-weight: normal;
+      margin-top: 0px;
+    }
+
+    #navbar-container {
+      background-color: #007bff;
+      padding: 10px;
+    }
+
+    #navbar-container nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #navbar-container nav a {
+      color: white;
+      text-decoration: none;
+      margin-right: 15px;
+      font-weight: bold;
+    }
+
+    #navbar-container .lang-selector {
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #navbar-container .lang-selector select {
+      padding: 4px 6px;
+      border-radius: 4px;
+      border: none;
+    }
+  </style>
+
+  <nav style="display: flex; align-items: center; justify-content: space-between;">
+    <div>
+      <a href="dashboard.html" data-i18n="nav_dashboard">Dashboard</a>
+      <a href="expense_input.html" data-i18n="nav_expense_input">Expense Input</a>
+      <a href="Financial Goal.html" data-i18n="nav_goal">Financial Goal</a>
+      <a href="#" onclick="logout()" data-i18n="nav_logout">Logout</a>
+    </div>
+
+    <div class="lang-selector">
+      <label class="lang-label" for="langSelect" data-i18n="language_label">🌐 Language:</label>
+      <select id="langSelect">
+        <option value="en">English</option>
+        <option value="ja">日本語</option>
+        <option value="ko">한국어</option>
+      </select>
+    </div>
+  </nav>
+
+  <script>
+    document.getElementById("langSelect").addEventListener("change", function () {
+      changeLanguage(this.value);
+    });
+  </script>
+</header>
